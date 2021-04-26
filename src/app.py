@@ -1,51 +1,57 @@
 import json
 
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, String, MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Table, Column, String, MetaData, Integer
 
 
 class DB:
-    def __init__(self, user, password, host, port):
+    def __init__(self, user, password, host, db_ousadia):
         self.user = user
         self.password = password
         self.host = host
-        self.port = port
+        self.db_ousadia =  db_ousadia
 
-        db_string = "postgres+pydataapi://{}:{}@{}:{}".format(
+        db_string = "mysql+pymysql://{}:{}@{}/{}".format(
             self.user, 
             self.password, 
-            self.host, 
-            self.port
+            self.host,
+            self.db_ousadia
         )
 
         self.db = create_engine(db_string)
-
-        self.meta = MetaData(self.db)
-
-        self.user_table = Table(
-            'users', self.meta,
-            Column('email', String, primary_key=True),
-            Column('name', String),
-            Column('surname', String),
-            Column('password', String),
-            Column('salt', String)
+        meta = MetaData()
+        self.Base = declarative_base()
+    
+        user = Table(
+            'foiPorra', meta, 
+            Column('id', Integer, primary_key = True), 
+            Column('name', String), 
         )
 
-    def create_tables(self):
-        self.meta.create_all(self.db)
+        select_user = user.select()
+        conn = self.db.connect()
+        result = conn.execute(select_user)
+        print(result)
 
-        return True
+        for row in result:
+            print (row)
+
+def init():
+    db_instance = DB(
+        user='test', 
+        password='password',    
+        host='127.0.0.1', 
+        db_ousadia='Exemple'
+    )
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    init()
 
 def lambda_handler(event, context):
-    db_instance = DB(
-        user='testdock', 
-        password='password', 
-        host='localhost', 
-        port=5432
-    )
-    
-    db_instance.create_tables()
-    
+    h = init()
+    print(h)
     # TODO implement
     return {
         'statusCode': 200,

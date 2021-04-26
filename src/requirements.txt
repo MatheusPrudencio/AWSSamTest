@@ -1,3 +1,5 @@
 requests
-sqlalchemy
-pymysql
+SQLAlchemy
+PyMySQL
+MySQL-Connector
+sqlalchemy-aurora-data-api
