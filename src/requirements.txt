@@ -1,5 +1,4 @@
 requests
 SQLAlchemy
 PyMySQL
-MySQL-Connector
-sqlalchemy-aurora-data-api
+cryptography

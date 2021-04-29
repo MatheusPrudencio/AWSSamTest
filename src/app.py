@@ -41,7 +41,7 @@ def init():
     db_instance = DB(
         user='test', 
         password='password',    
-        host='127.0.0.1', 
+        host='172.18.0.1', 
         db_ousadia='Exemple'
     )
 
